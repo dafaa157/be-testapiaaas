@@ -1,3 +1,25 @@
-from django.shortcuts import render
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
-# Create your views here.
+from .models import StudentProfile
+from .serializers import StudentProfileSerializer
+
+
+@api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def profile_me(request):
+    profile = StudentProfile.objects.get(user=request.user)
+
+    if request.method == "GET":
+        serializer = StudentProfileSerializer(profile)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
