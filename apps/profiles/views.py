@@ -34,3 +34,14 @@ def list_students(request):
     serializer = StudentProfileSerializer(profiles, many=True)
     
     return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def profile_detail(request, nim):
+    try:
+        profile = StudentProfile.objects.get(nim=nim)
+    except StudentProfile.DoesNotExist:
+        return Response({"detail": "Student not found"}, status=404)
+
+    serializer = StudentProfileSerializer(profile)
+    return Response(serializer.data)
