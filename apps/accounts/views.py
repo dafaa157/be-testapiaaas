@@ -23,6 +23,7 @@ def register_view(request):
             nim=request.data.get('nim', ''),
             full_name=request.data.get('full_name', user.username),
             prodi=request.data.get('prodi', ''),
+            phone=request.data.get('phone', '')
             bio=''
         )
         
