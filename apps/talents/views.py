@@ -64,3 +64,41 @@ def portfolio_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_skills(request, nim):
+    try:
+        profile = StudentProfile.objects.get(nim=nim)
+    except StudentProfile.DoesNotExist:
+        return Response({"detail": "Student not found"}, status=404)
+
+    skills = profile.skills.all()
+    serializer = SkillSerializer(skills, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_experiences(request, nim):
+    try:
+        profile = StudentProfile.objects.get(nim=nim)
+    except StudentProfile.DoesNotExist:
+        return Response({"detail": "Student not found"}, status=404)
+
+    experiences = profile.experiences.all()
+    serializer = ExperienceSerializer(experiences, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_portfolios(request, nim):
+    try:
+        profile = StudentProfile.objects.get(nim=nim)
+    except StudentProfile.DoesNotExist:
+        return Response({"detail": "Student not found"}, status=404)
+
+    portfolios = profile.portfolios.all()
+    serializer = PortfolioSerializer(portfolios, many=True)
+    return Response(serializer.data)
