@@ -23,3 +23,14 @@ def profile_me(request):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+@permission_classes([AllowAny]) # Bisa diganti AllowAny kalau mau public
+def list_students(request):
+    # Ambil semua data student
+    profiles = StudentProfile.objects.all()
+    
+    # Serialize datanya (many=True itu wajib karena datanya list/banyak)
+    serializer = StudentProfileSerializer(profiles, many=True)
+    
+    return Response(serializer.data)
