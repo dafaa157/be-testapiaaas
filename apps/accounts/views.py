@@ -17,6 +17,16 @@ def register_view(request):
 
     if serializer.is_valid():
         user = serializer.save()
+        
+        # AUTO-CREATE StudentProfile
+        StudentProfile.objects.create(
+            user=user,
+            nim=request.data.get('nim', ''),  # Ambil dari form register
+            full_name=request.data.get('full_name', user.username),
+            prodi='',
+            bio=''
+        )
+        
         return Response(
             {
                 "detail": "Register berhasil",
