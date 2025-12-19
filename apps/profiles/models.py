@@ -10,6 +10,7 @@ class StudentProfile(models.Model):
     full_name = models.CharField(max_length=150)
     prodi = models.CharField(max_length=120, blank=True)
     bio = models.TextField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
     profile_picture = models.ImageField(upload_to="profiles/", blank=True)
 
     def __str__(self):
