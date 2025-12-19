@@ -14,7 +14,7 @@ from .serializers import StudentProfileSerializer
 @api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])
 def profile_me(request):
-    profile = StudentProfile.objects.get(user=request.user)
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
 
     if request.method == "GET":
         serializer = StudentProfileSerializer(profile)
