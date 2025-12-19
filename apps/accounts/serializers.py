@@ -4,22 +4,35 @@ from django.contrib.auth.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(write_only=True)
-    nim = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "full_name", "nim", "email", "password"]
+        fields = ["id", "email", "password", "full_name"]
 
     def create(self, validated_data):
+        full_name = validated_data.pop("full_name")
+        email = validated_data.get("email")
+        password = validated_data.get("password")
+
+        # username = pakai email biar gak wajib input lain
+        username = email  
+
         user = User.objects.create_user(
-            username=validated_data["nim"],     # gunakan nim sbg username
-            email=validated_data["email"],
-            password=validated_data["password"],
+            username=username,
+            email=email,
+            password=password,
+            first_name=full_name,   # simpan full name *tanpa dipecah*
         )
-
-        # optional: simpan nama (boleh hapus kalau tidak perlu)
-        user.first_name = validated_data["full_name"]
-        user.save()
-
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "email", "full_name"]
+
+    def get_full_name(self, obj):
+        return obj.first_name
