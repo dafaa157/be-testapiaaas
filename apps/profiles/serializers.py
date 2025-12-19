@@ -16,7 +16,5 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             "prodi",
             "bio",
             "profile_picture",
-            "skills",
-            "experiences",
-            "portfolios",
+
         ]
