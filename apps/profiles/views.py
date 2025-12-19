@@ -10,7 +10,23 @@ from rest_framework import status
 from .models import StudentProfile
 from .serializers import StudentProfileSerializer
 
+@api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def profile_me(request):
+    profile = StudentProfile.objects.get(user=request.user)
 
+    if request.method == "GET":
+        serializer = StudentProfileSerializer(profile)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(["GET"])
 @authentication_classes([])      # matikan JWT auth
 @permission_classes([AllowAny])  # public endpoint
