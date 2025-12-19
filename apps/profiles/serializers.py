@@ -17,4 +17,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             "bio",
             "profile_picture",
             "phone", 
+            "skills", 
+            "experiences",
+            "portfolios"
         ]
