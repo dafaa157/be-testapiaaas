@@ -1,17 +1,16 @@
-from rest_framework.decorators import api_view, permission_classes, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 from .serializers import RegisterSerializer, UserSerializer
+from apps.profiles.models import StudentProfile
 
 
 @api_view(["POST"])
-@authentication_classes([])
-@permission_classes([AllowAny])
 def register_view(request):
     serializer = RegisterSerializer(data=request.data)
 
@@ -21,9 +20,9 @@ def register_view(request):
         # AUTO-CREATE StudentProfile
         StudentProfile.objects.create(
             user=user,
-            nim=request.data.get('nim', ''),  # Ambil dari form register
+            nim=request.data.get('nim', ''),
             full_name=request.data.get('full_name', user.username),
-            prodi='',
+            prodi=request.data.get('prodi', ''),
             bio=''
         )
         
