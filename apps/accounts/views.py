@@ -9,11 +9,7 @@ from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, UserSerializer
 from apps.profiles.models import StudentProfile
 
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import MyTokenObtainPairSerializer 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
 
 @api_view(["POST"])
 def register_view(request):
@@ -79,6 +75,7 @@ def login_view(request):
             "access": str(refresh.access_token),
             "refresh": str(refresh),
             "user": UserSerializer(user).data,
+            "is_superuser": user.is_superuser
         }
     )
 
