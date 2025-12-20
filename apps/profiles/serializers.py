@@ -13,7 +13,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = StudentProfile
-        fields = ["id", "full_name", "nim", "prodi", "bio", "profile_picture", "phone","skills", "experiences", "portfolios", "custom_cv_file"]
+        fields = ["id", "full_name", "nim", "prodi", "bio", "profile_picture", "phone","skills", "experiences", "portfolios", "custom_cv_file", "email", "linkedin", "github", "instagram"]
         # Make these optional when updating
         extra_kwargs = {
             'phone': {'required': False},
