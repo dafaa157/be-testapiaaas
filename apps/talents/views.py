@@ -102,3 +102,28 @@ def public_portfolios(request, nim):
     portfolios = profile.portfolios.all()
     serializer = PortfolioSerializer(portfolios, many=True)
     return Response(serializer.data)
+
+@api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
+def experience_detail(request, pk):
+    try:
+        # Hanya ambil data milik user yang sedang login
+        profile = StudentProfile.objects.get(user=request.user)
+        experience = Experience.objects.get(pk=pk, student=profile)
+    except (StudentProfile.DoesNotExist, Experience.DoesNotExist):
+        return Response({"detail": "Experience not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = ExperienceSerializer(experience)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = ExperienceSerializer(experience, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        experience.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
