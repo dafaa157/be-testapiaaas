@@ -2,12 +2,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import StudentProfile
 from .serializers import StudentProfileSerializer
 
 
 @api_view(["GET", "PUT"])
+@parser_classes([MultiPartParser, FormParser])
 @permission_classes([IsAuthenticated])
 def profile_me(request):
     try:
