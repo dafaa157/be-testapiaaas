@@ -1,10 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from cloudinary_storage.storage import MediaCloudinaryStorage
+from cloudinary.models import CloudinaryField
 
-class PublicPDFStorage(MediaCloudinaryStorage):
-    def _get_resource_type(self, name):
-        return 'raw'
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nim = models.CharField(max_length=20, unique=True)
@@ -16,11 +13,12 @@ class StudentProfile(models.Model):
     phone = models.CharField(max_length=20, default='')
 
 
-    custom_cv_file = models.FileField(
-        upload_to="cv_uploads/", 
+    custom_cv_file = CloudinaryField(
+        "CV File", 
+        resource_type="raw", 
+        folder="cv_uploads",
         blank=True, 
-        null=True,
-        storage=PublicPDFStorage() 
+        null=True
     )
     
     email = models.EmailField(max_length=100, blank=True, null=True)     # Email Publik
