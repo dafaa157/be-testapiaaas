@@ -1,7 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        # 👇 TAMBAHKAN INI: Masukkan info status user ke response
+        data['is_superuser'] = self.user.is_superuser
+        data['email'] = self.user.email
+        data['full_name'] = self.user.studentprofile.full_name if hasattr(self.user, 'studentprofile') else "Admin"
+        
+        return data
+        
 class RegisterSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
