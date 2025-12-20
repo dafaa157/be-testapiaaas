@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,6 +12,14 @@ class StudentProfile(models.Model):
     custom_cv_file = models.FileField(upload_to="cv_uploads/", blank=True, null=True)
     phone = models.CharField(max_length=20, default='')
 
+
+    custom_cv_file = models.FileField(
+        upload_to="cv_uploads/", 
+        blank=True, 
+        null=True,
+        storage=RawMediaCloudinaryStorage() 
+    )
+    
     email = models.EmailField(max_length=100, blank=True, null=True)     # Email Publik
     linkedin = models.URLField(max_length=200, blank=True, null=True)    # Link LinkedIn
     github = models.URLField(max_length=200, blank=True, null=True)      # Link GitHub
