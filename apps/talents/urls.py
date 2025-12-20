@@ -6,7 +6,7 @@ from .views import (
     portfolio_list_create,
     public_skills,
     public_experiences,
-    public_portfolios
+    public_portfolios,
     experience_detail,
 )
 
