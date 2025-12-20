@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from cloudinary_storage.storage import RawMediaCloudinaryStorage
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
+class PublicPDFStorage(MediaCloudinaryStorage):
+    def _get_resource_type(self, name):
+        return 'raw'
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nim = models.CharField(max_length=20, unique=True)
@@ -17,7 +20,7 @@ class StudentProfile(models.Model):
         upload_to="cv_uploads/", 
         blank=True, 
         null=True,
-        storage=RawMediaCloudinaryStorage() 
+        storage=PublicPDFStorage() 
     )
     
     email = models.EmailField(max_length=100, blank=True, null=True)     # Email Publik
