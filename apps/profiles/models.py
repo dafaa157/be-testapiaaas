@@ -9,7 +9,7 @@ class StudentProfile(models.Model):
     prodi = models.CharField(max_length=120, blank=True)
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to="profiles/", blank=True, null=True)
-    custom_cv_file = models.FileField(upload_to="cv_uploads/", blank=True, null=True)
+    
     phone = models.CharField(max_length=20, default='')
 
 
