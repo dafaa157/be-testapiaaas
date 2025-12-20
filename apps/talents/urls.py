@@ -8,10 +8,13 @@ from .views import (
     public_experiences,
     public_portfolios,
     experience_detail,
+    skill_detail,
+
 )
 
 urlpatterns = [
     path("skills/", skill_list_create),
+    path("skills/<int:pk>/", skill_detail),
     path("experiences/", experience_list_create),
     path("experiences/<int:pk>/", experience_detail),
     path("portfolios/", portfolio_list_create),
